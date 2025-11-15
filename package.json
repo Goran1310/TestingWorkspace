@@ -1,0 +1,25 @@
+{
+  "name": "prica_za_velike_i_male",
+  "version": "1.0.0",
+  "description": "A web app for browsing and playing Croatian children's audio stories from HRT's Juhuhu collection.",
+  "main": "index.html",
+  "scripts": {
+    "start": "lite-server",
+    "dev": "lite-server",
+    "test": "echo \"No tests configured\" && exit 0"
+  },
+  "keywords": [
+    "audio",
+    "stories",
+    "children",
+    "croatian",
+    "hrt",
+    "juhuhu"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  }
+}

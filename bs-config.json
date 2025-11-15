@@ -1,0 +1,15 @@
+{
+  "port": 3000,
+  "files": ["**/*.html", "**/*.css", "**/*.js", "**/*.json"],
+  "server": {
+    "baseDir": ".",
+    "routes": {
+      "/": "."
+    }
+  },
+  "open": true,
+  "notify": false,
+  "ui": false,
+  "logLevel": "silent",
+  "ghostMode": false
+}

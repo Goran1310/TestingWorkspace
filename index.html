@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Collection of Croatian children's audio stories from HRT Juhuhu">
+    <meta name="theme-color" content="#1a1a1a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Priče za Velike i Male - HRT Juhuhu</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header class="header-bar" role="banner">
+        <h1>Priče za Velike i Male</h1>
+        <div class="header-controls">
+            <button 
+                id="theme-toggle-btn" 
+                class="theme-toggle-btn"
+                aria-label="Toggle theme"
+                title="Switch between dark and light mode">
+                ☀️
+            </button>
+            <button 
+                id="shuffle-btn" 
+                class="shuffle-btn"
+                aria-label="Toggle shuffle mode"
+                aria-pressed="false"
+                title="Enable shuffle mode with auto-play">
+                🔀 Shuffle OFF
+            </button>
+            <button 
+                id="random-btn" 
+                class="random-btn"
+                aria-label="Play random story"
+                title="Play a random story">
+                🎲 Random Story
+            </button>
+        </div>
+    </header>
+
+    <main role="main">
+        <section class="collapsible-container" aria-labelledby="history-heading">
+            <button 
+                class="collapsible-toggle" 
+                type="button"
+                aria-expanded="false"
+                aria-controls="history-container">
+                <span class="arrow" aria-hidden="true">&#9654;</span> 
+                <span id="history-heading">Recently Played</span>
+            </button>
+            <div 
+                class="history-container" 
+                id="history-container"
+                role="region"
+                aria-labelledby="history-heading"></div>
+        </section>
+
+        <section class="collapsible-container" aria-labelledby="playlists-heading">
+            <button 
+                class="collapsible-toggle" 
+                type="button"
+                aria-expanded="false"
+                aria-controls="playlist-container">
+                <span class="arrow" aria-hidden="true">&#9654;</span> 
+                <span id="playlists-heading">Playlists</span>
+            </button>
+            <div 
+                class="playlist-container" 
+                id="playlist-container"
+                role="region"
+                aria-labelledby="playlists-heading"></div>
+        </section>
+
+        <section class="collapsible-container" aria-labelledby="favorites-heading">
+            <button 
+                class="collapsible-toggle" 
+                type="button"
+                aria-expanded="false"
+                aria-controls="favorite-container">
+                <span class="arrow" aria-hidden="true">&#9654;</span> 
+                <span id="favorites-heading">Favorite Stories</span>
+            </button>
+            <div 
+                class="favorite-container" 
+                id="favorite-container"
+                role="region"
+                aria-labelledby="favorites-heading"></div>
+        </section>
+
+        <section class="collapsible-container" aria-labelledby="all-stories-heading">
+            <button 
+                class="collapsible-toggle" 
+                type="button"
+                aria-expanded="false"
+                aria-controls="link-container">
+                <span class="arrow" aria-hidden="true">&#9654;</span> 
+                <span id="all-stories-heading">All Stories</span>
+            </button>
+            <div 
+                class="link-container" 
+                id="link-container"
+                role="region"
+                aria-labelledby="all-stories-heading"></div>
+        </section>
+
+        <div class="search-bar" role="search">
+            <label for="search-input" class="visually-hidden">Search stories</label>
+            <input 
+                type="search" 
+                id="search-input" 
+                placeholder="Search stories..." 
+                aria-label="Search stories"
+                autocomplete="off">
+        </div>
+
+        <div class="filter-controls" role="region" aria-label="Filter controls">
+            <div class="filter-group">
+                <label for="year-filter">Year:</label>
+                <select id="year-filter" aria-label="Filter by year">
+                    <option value="all">All Years</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="author-filter">Author:</label>
+                <select id="author-filter" aria-label="Filter by author">
+                    <option value="all">All Authors</option>
+                </select>
+            </div>
+            <p id="search-results-info" class="results-info" aria-live="polite">Showing all stories</p>
+        </div>
+
+        <div class="data-management" role="region" aria-label="Data management">
+            <h3>Backup & Restore</h3>
+            <div class="data-controls">
+                <button id="export-data-btn" class="data-btn" aria-label="Export all data">
+                    💾 Export Data
+                </button>
+                <button id="import-data-btn" class="data-btn" aria-label="Import data">
+                    📂 Import Data
+                </button>
+                <input type="file" id="import-file-input" accept=".json" style="display: none;" />
+            </div>
+            <p class="data-info">Export your favorites, playlists, and playback history to backup. Import to restore from a previous backup.</p>
+        </div>
+
+        <div 
+            id="audio-player-container" 
+            class="audio-player-container"
+            role="region"
+            aria-live="polite"
+            aria-label="Audio player"></div>
+    </main>
+
+    <script src="js/script.js" defer></script>
+</body>
+</html>
