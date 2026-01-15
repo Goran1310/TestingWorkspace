@@ -457,6 +457,44 @@ Share = "50.0"  // InvariantCulture - breaks locally ❌
 - Serves as living documentation of test coverage achievements
 - Helps prioritize remaining work
 
+### Agent Documentation Commit Routine (Meta-Documentation)
+**When to Commit**: After documenting significant lessons learned or new patterns in this agent file
+
+**Standard Procedure**:
+1. **Capture Lessons**: As you encounter and solve new testing patterns/issues, document them in this agent file
+2. **Review Changes**: Ensure documentation is clear, includes examples, and follows established format
+3. **Commit Agent File Only**: Stage `.github/agents/test-planner.agent.md` for commit
+   - **DO NOT commit**: Working documents like `Test_Plan_*.md` files (these are local workspace documents)
+   - **DO commit**: Agent files that serve as permanent knowledge base for the team
+4. **Descriptive Commit Message**: Use format `docs(agent): Brief description`
+   ```bash
+   git add .github/agents/test-planner.agent.md
+   git commit -m "docs(agent): Add [pattern name] lesson learned
+   
+   - Detailed bullet points of what was added
+   - Problem statement and solution
+   - Examples and key takeaways"
+   git push origin master
+   ```
+5. **Verify Push**: Confirm changes appear on GitHub repository
+
+**Repository Structure**:
+- **`.github/agents/`**: Permanent knowledge base (version controlled, committed)
+- **Root `Test_Plan_*.md`**: Working documents (local only, not committed)
+- **Purpose**: Agents serve as team-wide knowledge sharing, test plans are personal workspace
+
+**Example Scenarios**:
+- Discovered NSubstitute limitation with extension methods → Document pattern → Commit agent
+- Found culture-dependent parsing issue → Add to lessons learned → Commit agent
+- Created new mock configuration pattern → Document with examples → Commit agent
+
+**Benefits**:
+- Builds institutional knowledge over time
+- Prevents other developers from repeating same mistakes
+- Creates searchable repository of testing patterns
+- Enables consistent testing practices across team
+- Version control tracks evolution of testing knowledge
+
 ## Pre-Implementation Checklist
 
 Before implementing tests for any service method:
