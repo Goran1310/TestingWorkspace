@@ -306,6 +306,46 @@ _repo.Save(Arg.Any<MyDto>());
 _repo.Save(Arg.Is<MyDto>(d => d.Id == 1));
 ```
 
+### UrlHelper Extension Method Mocking
+**Problem**: RedundantArgumentMatcherException when using `Arg.Any<>` with `Url.Action()` extension method.  
+**Root Cause**: Extension methods are static and cannot be mocked directly with NSubstitute. Using `Arg.Any<>` on extension method parameters causes the argument matcher to remain unbound.
+
+**Example Failure**:
+```csharp
+// ❌ FAILS - Extension method cannot be mocked
+_urlHelper.Action("Index", "Receipt", Arg.Any<ReceiptVM>()).Returns("/redirect");
+// Error: RedundantArgumentMatcherException - Remaining: any ReceiptVM
+
+// Controller code that fails:
+return Redirect(Url.Action("Index", "Receipt", receiptVM));
+```
+
+**Solution**: Mock the underlying `IUrlHelper.Action(UrlActionContext)` interface method instead:
+```csharp
+// ✅ WORKS - Mock the interface method
+_urlHelper.Action(Arg.Any<UrlActionContext>()).Returns("/mp/ChangeMpType/Receipt/Index");
+
+// Verify redirect result instead of using Received()
+Assert.Multiple(() =>
+{
+    Assert.That(result, Is.Not.Null);
+    Assert.That(result.Url, Is.EqualTo("/mp/ChangeMpType/Receipt/Index"));
+});
+
+// Alternative: If you need to verify specific parameters, use Arg.Is<>
+_urlHelper.Action(Arg.Is<UrlActionContext>(ctx => 
+    ctx.ActionName == "Index" && 
+    ctx.ControllerName == "Receipt"))
+    .Returns("/redirect");
+```
+
+**Key Points**:
+- Extension methods like `Url.Action(string, string, object)` are static wrappers around interface methods
+- NSubstitute can only mock virtual/abstract members, not static methods
+- Always mock the underlying interface method: `IUrlHelper.Action(UrlActionContext)`
+- Verify redirect URLs directly instead of trying to verify extension method calls
+- Applies to other extension methods: use `Arg.Any<TContext>()` for the wrapped parameter type
+
 ### Incremental Development
 - **Batch sizes**: Simple methods (4-6 tests), complex (2-3 tests), session-heavy (3-4 tests)
 - **Pattern**: Create small batch → run → validate → identify patterns → expand
@@ -384,6 +424,38 @@ Share = "50.0"  // InvariantCulture - breaks locally ❌
 2. Create helper libraries for common setups (e.g., `SessionTestHelper.SetupInt()`)
 3. Reference patterns in test comments: `// See test-planner.agent.md: Session Mocking Pattern`
 4. Maintain example files: `/tests/Examples/SessionBasedServiceTests.example.cs`
+
+### Test Plan Maintenance (Critical Routine)
+**When to Update**: After each successful test completion where all tests pass (100% pass rate achieved)
+
+**Standard Procedure**:
+1. **Build Verification**: Ensure solution builds successfully (`dotnet build`)
+2. **Test Execution**: Run all relevant tests and confirm 100% pass rate
+3. **Update Test Plan**: Modify `Test_Plan_MeteringPoint_MeterValues_MarketMessages.md` (or relevant plan):
+   - Change test status from "CREATED" to "COMPLETED"
+   - Update pass rate to "(100% passing ✅)"
+   - Remove "X fixes needed" notes when all issues resolved
+   - Add completion date if tracking milestones
+4. **Document Patterns**: Add any new testing patterns discovered during implementation to this agent file
+5. **Commit Changes**: Include test plan updates in the same commit as test fixes
+
+**Example Update**:
+```markdown
+// Before:
+- ✅ `SummaryStepController` - **7 tests CREATED** (43% passing - 4 need UrlHelper fixes)
+- **ChangeMpType Workflow Total**: **64 tests - 56 passing (87.5%)**, 8 minor fixes needed
+
+// After:
+- ✅ `SummaryStepController` - **7 tests COMPLETED** (100% passing ✅)
+- **ChangeMpType Workflow Total**: **64 tests (100% passing ✅)** - All issues resolved
+```
+
+**Benefits**:
+- Provides accurate project status for stakeholders
+- Tracks progress over time
+- Identifies completed vs. in-progress work
+- Serves as living documentation of test coverage achievements
+- Helps prioritize remaining work
 
 ## Pre-Implementation Checklist
 
