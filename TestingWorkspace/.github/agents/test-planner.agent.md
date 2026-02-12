@@ -28,6 +28,59 @@ You are a specialized test planning and test code generation assistant for Hanse
 4. Implement tests following established patterns (see sections below)
 5. Document new patterns for knowledge sharing
 
+## Lessons Learned Concept
+
+The **Lessons Learned** section serves as a **living knowledge base** that captures patterns, pitfalls, and solutions discovered during actual test implementation. This creates a feedback loop where each testing session makes future sessions faster and more accurate.
+
+### Core Purpose
+
+**Build institutional knowledge that prevents repeating mistakes and accelerates future test development.**
+
+### Key Benefits
+
+1. **Pattern Recognition**: Documents reusable patterns that can be referenced in future implementations
+   - Example: "When service creates objects internally, use `Arg.Is<T>(predicate)` instead of `Arg.Any<T>()`"
+   - Prevents rediscovering the same solution multiple times
+
+2. **Pitfall Prevention**: Captures common mistakes before they happen again
+   - Example: Culture-dependent decimal parsing, UrlHelper extension method mocking issues
+   - Documents why certain approaches fail and what works instead
+
+3. **Accelerated Development**: New tests can reference proven patterns
+   - Reduces time spent on debugging similar issues
+   - Provides working code examples from actual implementations
+
+4. **Knowledge Transfer**: Helps other developers (or AI in future sessions) understand context and reasoning
+   - Preserves "why" decisions were made, not just "what" was done
+   - Creates searchable repository of team expertise
+
+### What to Document
+
+- **Type Discovery**: How to find correct types, enums, and their actual definitions
+- **Naming Conventions**: Field naming patterns, casing rules, prefix/suffix usage
+- **Complex Initialization**: Patterns for nested ViewModels, collections, dependencies
+- **NSubstitute Patterns**: When to use `Arg.Any<>` vs `Arg.Is<>`, reference vs value equality
+- **Culture/Environment Issues**: CI/CD differences, locale-specific parsing, timezone handling
+- **API Limitations**: Framework quirks, extension method mocking, static method constraints
+- **Debugging Strategies**: How to efficiently identify and batch-fix similar errors
+
+### Documentation Format
+
+Each lesson should include:
+- **Problem**: Clear statement of what went wrong or what pattern was needed
+- **Root Cause**: Why it happens (technical explanation)
+- **Solution**: Working code example or approach
+- **Example**: Real code from actual implementation
+- **Key Points**: Takeaways and when to apply the pattern
+
+### Knowledge Evolution
+
+This section grows organically:
+- Add new discoveries immediately after solving them
+- Update existing patterns with new examples or edge cases
+- Refactor similar patterns into generalized guidelines
+- Reference lessons in test code comments: `// See test-planner.agent.md: Argument Matching Pattern`
+
 ## Hansen Technologies Testing Standards
 
 ### Testing Strategy
@@ -306,6 +359,43 @@ _repo.Save(Arg.Any<MyDto>());
 _repo.Save(Arg.Is<MyDto>(d => d.Id == 1));
 ```
 
+### Received() Verification: Don't Await (Critical Feb 2026)
+**Problem**: Awaiting NSubstitute `Received()` verification calls creates brittle dependency on mock's configured return Task.  
+**Root Cause**: `Received()` returns a synchronous configurator for void/Task methods, not an awaitable Task. When awaited, it depends on the substitute's configured return value (e.g., `Task.CompletedTask`). If mock setup changes (e.g., returns null), test breaks despite passing before.
+
+**Example Failure**:
+```csharp
+// ❌ FAILS - Incorrect await on verification
+_databaseConnection.InTransation(Arg.Any<Func<IDbConnection, Task>>())
+    .Returns(Task.CompletedTask);
+
+await _repository.UpdateStateAsync(123, state);
+
+await _databaseConnection.Received(1).InTransation(Arg.Any<Func<IDbConnection, Task>>());
+// Problem: Verification depends on configured Task return, not actual call verification
+```
+
+**Solution**: Remove await from Received() calls - verification is synchronous:
+```csharp
+// ✅ WORKS - Synchronous verification
+_databaseConnection.InTransation(Arg.Any<Func<IDbConnection, Task>>())
+    .Returns(Task.CompletedTask);
+
+await _repository.UpdateStateAsync(123, state);
+
+// No await - verification is synchronous operation
+_databaseConnection.Received(1).InTransation(Arg.Any<Func<IDbConnection, Task>>());
+```
+
+**Key Points**:
+- `Received(count)` returns a configurator, not an awaitable
+- Verification intent (confirming method was called) is synchronous
+- Awaiting couples test to mock configuration rather than behavior
+- Always use `Received()` without await for any verification
+- Applies to all sync verification: `Received()`, `DidNotReceive()`, `ReceivedWithAnyArgs()`
+
+**Detected**: FaultHandlingCompProcessRepositoryTests (Feb 12, 2026) - 5 incorrect awaits removed from UpdateStateAsync and ReProcess verification calls. All tests passed after removing awaits, confirming unnecessary dependency on mock return value.
+
 ### UrlHelper Extension Method Mocking
 **Problem**: RedundantArgumentMatcherException when using `Arg.Any<>` with `Url.Action()` extension method.  
 **Root Cause**: Extension methods are static and cannot be mocked directly with NSubstitute. Using `Arg.Any<>` on extension method parameters causes the argument matcher to remain unbound.
@@ -419,6 +509,16 @@ Share = "50.0"  // InvariantCulture - breaks locally ❌
 
 **Prevention**: Always test with `--settings coverlet.runsettings` before pushing to catch culture mismatches early.
 
+**Known Occurrences**:
+- **MeteringPointServiceTests.GetComponentProperties_ShouldMapAllProperties_WhenDataExists** (Jan 16, 2026):
+  - Test data: `"100.5"` (period separator)
+  - Norwegian culture expects: `"100,5"` (comma separator)
+  - Service location: `MeteringPointService.cs:139` uses `Convert.ToDecimal()`
+  - Status: **DEFERRED** - Documented for future culture standardization effort
+  - Fix options: 
+    1. Change test data to `"100,5"` (quick fix for local culture)
+    2. Update service to use `decimal.Parse(value, CultureInfo.InvariantCulture)` (recommended)
+
 ### Knowledge Sharing
 1. Update this document with new patterns
 2. Create helper libraries for common setups (e.g., `SessionTestHelper.SetupInt()`)
@@ -474,9 +574,17 @@ Share = "50.0"  // InvariantCulture - breaks locally ❌
    - Detailed bullet points of what was added
    - Problem statement and solution
    - Examples and key takeaways"
-   git push origin master
    ```
-5. **Verify Push**: Confirm changes appear on GitHub repository
+5. **Create Feature Branch and Push**: Master branch is protected - use pull requests
+   ```bash
+   # If push to master fails with "protected branch" error:
+   git checkout -b feature/agent-documentation-update
+   git push -u origin feature/agent-documentation-update
+   ```
+6. **Create Pull Request**: Navigate to the provided GitHub URL to create PR
+7. **Verify Merge**: Confirm changes appear on GitHub after PR approval
+
+**⚠️ Protected Branch Policy**: The master branch requires pull requests. Direct pushes will be rejected. Always work in feature branches for code and documentation changes.
 
 **Repository Structure**:
 - **`.github/agents/`**: Permanent knowledge base (version controlled, committed)
