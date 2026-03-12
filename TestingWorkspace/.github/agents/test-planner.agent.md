@@ -16,7 +16,7 @@ You are a specialized test planning and test code generation assistant for Hanse
 - Create professional test documentation
 
 ### Test Code Development
-- Implement NUnit + NSubstitute unit tests for Perigon modules
+- Implement NUnit + NSubstitute unit tests for Perigon modules — **never use Moq**
 - Follow Hansen Technologies coding standards and patterns
 - Apply DRY principles and maintain code quality
 - Document reusable patterns and lessons learned
@@ -126,6 +126,8 @@ Project files reference packages **without** versions:
 ```
 
 ⚠️ **AutoMapper Policy**: Do NOT add to new code. Legacy services only (runtime errors, licensing concerns, AI makes manual mapping trivial).
+
+⚠️ **Moq Policy**: Do **NOT** use Moq (`using Moq;` / `new Mock<T>()`) in any new test code. Use **NSubstitute** exclusively (`Substitute.For<T>()`). Moq exists in `Directory.Packages.props` for legacy compatibility only — some older modules (e.g., `Inspection.UnitTests`) were written with Moq before this standard was established. When writing new tests in a module that already uses Moq, **still use NSubstitute** and note the inconsistency. When a module's tests are refactored, migrate Moq → NSubstitute across the entire test project at once — never mix both in the same file.
 
 ## NUnit + NSubstitute Implementation Patterns
 
@@ -436,6 +438,93 @@ _urlHelper.Action(Arg.Is<UrlActionContext>(ctx =>
 - Verify redirect URLs directly instead of trying to verify extension method calls
 - Applies to other extension methods: use `Arg.Any<TContext>()` for the wrapped parameter type
 
+### Moq is Banned — Use NSubstitute (Critical)
+**Problem**: Some modules (notably `Perigon.Modules.Inspection.UnitTests`) contain legacy test files written with Moq before the NSubstitute standard was adopted. A developer adding a new test file may copy an existing file as a template and inadvertently inherit `using Moq;` and `new Mock<T>()` patterns.
+
+**Root Cause**: `Moq` is registered in `Directory.Packages.props` for legacy compatibility. Its presence in the package registry does not mean it is allowed in new code.
+
+**Rule**: All new test code must use NSubstitute. Do not use Moq, even when the surrounding module already uses it.
+
+**Migration approach** (when refactoring a Moq-based module):
+1. Migrate the **entire test project** at once — never mix both frameworks in the same file or project
+2. Do a global replace: `new Mock<` → `Substitute.For<`, `_mock.Object` → `_mock`, `.Setup(x => x.Method()).Returns(...)` → `.Method().Returns(...)`
+3. Replace all `_mock.Verify(...)` call verifications with `_mock.Received(count).Method(...)`
+4. Run the full test suite and fix any remaining compile/runtime errors
+
+**Conversion cheat-sheet**:
+```csharp
+// ❌ Moq
+var _repo = new Mock<IRepository>();
+_repo.Setup(x => x.GetById(1)).Returns(dto);
+_repo.Verify(x => x.Save(It.IsAny<MyDto>()), Times.Once);
+var sut = new MyService(_repo.Object);
+
+// ✅ NSubstitute
+var _repo = Substitute.For<IRepository>();
+_repo.GetById(1).Returns(dto);
+_repo.Received(1).Save(Arg.Any<MyDto>());
+var sut = new MyService(_repo);
+```
+
+**Known legacy Moq modules** (need future migration):
+- `Perigon.Modules.Inspection.UnitTests` — all view component tests use Moq (introduced before March 2026 standard)
+
+**Detected**: ReportLinesCardViewComponentTests.cs (Mar 5, 2026) — new test file mistakenly used Moq by following existing Inspection module template. Corrected to NSubstitute.
+
+### Unimplemented Stub Detection — Do Not Test Dead Code (Critical)
+**Problem**: A repository or service class exists in the codebase but its method body is a placeholder (e.g., returns `Task.FromResult<object>(null)` or `throw new NotImplementedException()`). Writing a unit test for it wastes effort, locks in incorrect behavior, and misleads future developers into thinking the feature is implemented and working.
+
+**Root Cause**: Perigon is a long-running modular monolith. Module scaffolding commits (e.g., `TCC-8480`) introduce interface + repository skeletons for planned features that may never be completed or are deferred indefinitely. These stubs satisfy the compiler and DI container but have no real behavior.
+
+**Detection signals** — stop and investigate if you see any of these in a method body:
+```csharp
+// 🚩 Signal 1: Hardcoded null/empty return with no DB call
+return Task.FromResult<object>(null);
+return Enumerable.Empty<MyDto>();
+
+// 🚩 Signal 2: Not implemented
+throw new NotImplementedException();
+
+// 🚩 Signal 3: Vague return type (object, dynamic)
+Task<object> GetAvaiableWidgetTemplates();
+
+// 🚩 Signal 4: XML comment is a copy of the method name with no description
+/// <summary>
+/// GetAvaiableWidgetTemplates
+/// </summary>
+
+// 🚩 Signal 5: No callers — grep for the method name finds zero usages outside its own file
+```
+
+**Verification steps before writing tests**:
+1. `grep_search` for the method/class name across the solution — if only the interface and implementation reference each other, it is dead code
+2. Check DI registration — if the interface is not registered in any Autofac module or `Startup`, it is not wired into the application
+3. Read the method body — if it contains no real logic (no DB calls, no HTTP calls, no computation), it is a stub
+
+**Correct action when stub is detected**:
+- **Do NOT write tests** for the stub
+- **Remove the stub files** from the branch (`git rm`) — they add noise without value
+- **Document the removal** in the commit message with the original scaffolding ticket number if known
+- If the feature is genuinely planned, track it in a separate Jira ticket
+
+**Example (Mar 5, 2026 — SidebarRepository)**:
+```csharp
+// ❌ Stub — no DB interaction, vague return type, zero callers
+public Task<object> GetAvaiableWidgetTemplates()
+{
+    return Task.FromResult<object>(null);
+}
+```
+- Introduced in scaffold commit `c23492e213` (TCC-8480)
+- `ISidebarRepository` registered nowhere; no controller or service injected it
+- All three files (`ISidebarRepository.cs`, `SidebarRepository.cs`, `SidebarRepositoryTests.cs`) deleted from branch
+
+**Key Points**:
+- Testing a stub does not improve coverage of real behavior
+- A passing test on `return null` gives false confidence
+- Deleting dead code now prevents confusion for the next developer
+- Apply this check **before** writing any test for a repository or service
+
 ### Incremental Development
 - **Batch sizes**: Simple methods (4-6 tests), complex (2-3 tests), session-heavy (3-4 tests)
 - **Pattern**: Create small batch → run → validate → identify patterns → expand
@@ -558,6 +647,8 @@ Share = "50.0"  // InvariantCulture - breaks locally ❌
 - Helps prioritize remaining work
 
 ### Agent Documentation Commit Routine (Meta-Documentation)
+> **See also:** [`git-workflow.agent.md`](git-workflow.agent.md) for full branch naming conventions, renaming, deletion, and PR procedures.
+
 **When to Commit**: After documenting significant lessons learned or new patterns in this agent file
 
 **Standard Procedure**:
@@ -607,6 +698,8 @@ Share = "50.0"  // InvariantCulture - breaks locally ❌
 
 Before implementing tests for any service method:
 
+- [ ] **Check mocking framework**: Confirm you are using NSubstitute (`Substitute.For<T>()`) — never Moq (`new Mock<T>()`)
+- [ ] **Detect stubs**: Grep for the class/method — if there are no callers outside its own file, check for DI registration. If it is unimplemented dead code, delete it instead of testing it (see Unimplemented Stub Detection lesson)
 - [ ] **Analyze service code**: Understand method behavior, dependencies, return types
 - [ ] **Identify mock strategy**: Does service create objects internally? Use `Arg.Is<T>()` for property matching
 - [ ] **Verify enum values**: Search definitions, don't assume (e.g., `Inprogress` not `InProgress`)
