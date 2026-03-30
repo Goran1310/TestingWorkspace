@@ -1,0 +1,26 @@
+C:\Users\goran.lovincic\source\repos\API endpoint FA\bin\Debug\net8.0\API endpoint FA.exe
+C:\Users\goran.lovincic\source\repos\API endpoint FA\bin\Debug\net8.0\API endpoint FA.deps.json
+C:\Users\goran.lovincic\source\repos\API endpoint FA\bin\Debug\net8.0\API endpoint FA.runtimeconfig.json
+C:\Users\goran.lovincic\source\repos\API endpoint FA\bin\Debug\net8.0\API endpoint FA.dll
+C:\Users\goran.lovincic\source\repos\API endpoint FA\bin\Debug\net8.0\API endpoint FA.pdb
+C:\Users\goran.lovincic\source\repos\API endpoint FA\bin\Debug\net8.0\ClosedXML.dll
+C:\Users\goran.lovincic\source\repos\API endpoint FA\bin\Debug\net8.0\ClosedXML.Parser.dll
+C:\Users\goran.lovincic\source\repos\API endpoint FA\bin\Debug\net8.0\DocumentFormat.OpenXml.dll
+C:\Users\goran.lovincic\source\repos\API endpoint FA\bin\Debug\net8.0\DocumentFormat.OpenXml.Framework.dll
+C:\Users\goran.lovincic\source\repos\API endpoint FA\bin\Debug\net8.0\ExcelNumberFormat.dll
+C:\Users\goran.lovincic\source\repos\API endpoint FA\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\goran.lovincic\source\repos\API endpoint FA\bin\Debug\net8.0\RBush.dll
+C:\Users\goran.lovincic\source\repos\API endpoint FA\bin\Debug\net8.0\SixLabors.Fonts.dll
+C:\Users\goran.lovincic\source\repos\API endpoint FA\bin\Debug\net8.0\System.IO.Packaging.dll
+C:\Users\goran.lovincic\source\repos\API endpoint FA\obj\Debug\net8.0\API endpoint FA.csproj.AssemblyReference.cache
+C:\Users\goran.lovincic\source\repos\API endpoint FA\obj\Debug\net8.0\API endpoint FA.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\goran.lovincic\source\repos\API endpoint FA\obj\Debug\net8.0\API endpoint FA.AssemblyInfoInputs.cache
+C:\Users\goran.lovincic\source\repos\API endpoint FA\obj\Debug\net8.0\API endpoint FA.AssemblyInfo.cs
+C:\Users\goran.lovincic\source\repos\API endpoint FA\obj\Debug\net8.0\API endpoint FA.csproj.CoreCompileInputs.cache
+C:\Users\goran.lovincic\source\repos\API endpoint FA\obj\Debug\net8.0\API endp.CAA2D518.Up2Date
+C:\Users\goran.lovincic\source\repos\API endpoint FA\obj\Debug\net8.0\API endpoint FA.dll
+C:\Users\goran.lovincic\source\repos\API endpoint FA\obj\Debug\net8.0\refint\API endpoint FA.dll
+C:\Users\goran.lovincic\source\repos\API endpoint FA\obj\Debug\net8.0\API endpoint FA.pdb
+C:\Users\goran.lovincic\source\repos\API endpoint FA\obj\Debug\net8.0\API endpoint FA.genruntimeconfig.cache
+C:\Users\goran.lovincic\source\repos\API endpoint FA\obj\Debug\net8.0\ref\API endpoint FA.dll
+C:\Users\goran.lovincic\source\repos\API endpoint FA\obj\Debug\net8.0\API endpoint FA.sourcelink.json

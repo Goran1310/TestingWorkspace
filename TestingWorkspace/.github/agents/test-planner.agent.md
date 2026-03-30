@@ -441,6 +441,19 @@ _urlHelper.Action(Arg.Is<UrlActionContext>(ctx =>
 - **Pattern**: Create small batch → run → validate → identify patterns → expand
 - **Coverage per method**: Happy path, null handling, edge cases, state verification, property preservation
 
+### PR Review Hygiene for New Tests (Mar 2026)
+**Problem**: Coverage tests passed, but PR review flagged consistency/readability issues.
+
+**Keep it simple**:
+1. Add `[Description("...")]` to every new `[Test]` (match surrounding module style).
+2. Place new tests in the correct existing region (e.g., UWCS-100/200/500/600), not a convenient nearby region.
+3. Avoid weak CSV assertions like `Does.Contain("1")`; split and assert exact IDs:
+
+```csharp
+var ids = csv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+Assert.That(ids, Is.EquivalentTo(new[] { "1", "2" }));
+```
+
 ### Culture-Dependent Parsing (Critical for CI/CD)
 **Problem**: Test data with decimal values fails on GitHub CI but passes locally (or vice versa).  
 **Root Cause**: `Convert.ToDecimal(string)` respects thread culture:
