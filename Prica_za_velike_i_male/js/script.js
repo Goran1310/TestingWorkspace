@@ -867,6 +867,14 @@ function playRandomStory(preventRepeat = false) {
     openAudioPlayer(randomLink, displayText);
 }
 
+// Start random playback and keep auto-continuing on track end.
+function playRandomSession() {
+    if (!isShuffleMode) {
+        toggleShuffleMode();
+    }
+    playRandomStory(true);
+}
+
 // Toggle shuffle mode
 function toggleShuffleMode() {
     isShuffleMode = !isShuffleMode;
@@ -1145,7 +1153,7 @@ function setupEventListeners() {
     // Random story button
     const randomBtn = document.getElementById('random-btn');
     if (randomBtn) {
-        randomBtn.onclick = playRandomStory;
+        randomBtn.onclick = playRandomSession;
     }
     
     // Shuffle mode button
@@ -1236,7 +1244,7 @@ function setupEventListeners() {
         // Ctrl/Cmd + R for random story
         if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
             e.preventDefault();
-            playRandomStory();
+            playRandomSession();
         }
         
         // Ctrl/Cmd + S for shuffle toggle
