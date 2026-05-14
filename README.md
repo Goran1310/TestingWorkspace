@@ -6,7 +6,7 @@ A web application for browsing and playing Croatian children's audio stories fro
 
 - 📚 **204 Audio Stories** - Collection of Croatian children's stories from HRT Juhuhu
 - ❤️ **Favorites System** - Mark and save your favorite stories
-- 🎲 **Random Story** - Play a random story with one click
+- 🎲 **Random Story** - Start random playback with auto-continue to the next random story
 - 🔀 **Shuffle Mode** - Auto-play random stories without repeats
 - 🔍 **Advanced Search** - Fuzzy search with year and author filters
 - 📊 **Metadata Extraction** - Automatic extraction of year, author, and title
@@ -21,7 +21,7 @@ A web application for browsing and playing Croatian children's audio stories fro
 - ⚡ **Performance** - Pagination for smooth browsing (50 stories per page)
 - ⌨️ **Keyboard Shortcuts**:
   - `Ctrl/Cmd + K` - Focus search
-  - `Ctrl/Cmd + R` - Random story
+  - `Ctrl/Cmd + R` - Start random playback session
   - `Ctrl/Cmd + S` - Toggle shuffle mode
   - `Enter/Space` - Activate buttons
   - `Escape` - Clear search
@@ -110,7 +110,7 @@ Prica_za_velike_i_male/
 2. **Browse Stories**: Scroll through "All Stories" section
 3. **Play a Story**: Click on any story title to start playing
 4. **Add to Favorites**: Click the ❤️ button next to any story
-5. **Random Story**: Click the 🎲 button in the header
+5. **Random Story**: Click the 🎲 button to start continuous random playback
 6. **Shuffle Mode**: Click the 🔀 button to enable auto-play without repeats
 7. **Search**: Use the search bar to filter stories by name
 8. **Filter**: Use year and author dropdowns to narrow results
