@@ -37,13 +37,13 @@ task/per/tb-1000
 
 **Format:** `{JIRA-ID} {description}`
 
-- Jira ID in **UPPERCASE**: `TCC-12345`, `TB-1000`, `VAT-99`
+- Jira ID in **UPPERCASE**: `GRID-1234`, `TB-1000`, `VAT-99`
 - Use imperative mood: "Add", "Fix", "Remove", "Refactor", "Update"
 - First line ≤ 72 characters
 
 ### Examples
 ```
-TCC-12345 Add user widget configuration tests
+GRID-1234 Add user widget configuration tests
 TB-1000 Fix decimal rounding in invoice calculation
 VAT-99 Remove deprecated Oracle API wrapper
 ```
@@ -85,9 +85,9 @@ git merge origin/master
 Create parallel feature branches without full checkouts:
 
 ```powershell
-git worktree add -b story/mp/tcc-12345 ../feature-12345
+git worktree add -b story/mp/grid-1234 ../feature-1234
 # ... work, commit, push ...
-git worktree remove ../feature-12345
+git worktree remove ../feature-1234
 ```
 
 ---
