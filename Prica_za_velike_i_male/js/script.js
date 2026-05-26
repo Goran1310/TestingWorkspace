@@ -378,7 +378,7 @@ function displayFavorites() {
     favoriteContainer.appendChild(list);
 }
 
-function openAudioPlayer(link, title) {
+function openAudioPlayer(link, title, shouldAutoplay = false) {
     const audioPlayerContainer = document.getElementById('audio-player-container');
     
     // Check if we have a saved position
@@ -418,6 +418,20 @@ function openAudioPlayer(link, title) {
     addToHistory(link, title);
     
     const audioElement = document.getElementById('audio-player');
+
+    if (shouldAutoplay) {
+        const attemptAutoplay = () => {
+            audioElement.play().catch((error) => {
+                console.warn('Autoplay blocked:', error);
+            });
+        };
+
+        if (audioElement.readyState >= 2) {
+            attemptAutoplay();
+        } else {
+            audioElement.addEventListener('canplay', attemptAutoplay, { once: true });
+        }
+    }
     
     // Resume from saved position
     if (hasPosition) {
@@ -864,7 +878,7 @@ function playRandomStory(preventRepeat = false) {
         }
     }
     
-    openAudioPlayer(randomLink, displayText);
+    openAudioPlayer(randomLink, displayText, true);
 }
 
 // Start random playback and keep auto-continuing on track end.
@@ -872,6 +886,26 @@ function playRandomSession() {
     if (!isShuffleMode) {
         toggleShuffleMode();
     }
+    playRandomStory(true);
+}
+
+function startShuffleFromButtonClick() {
+    if (isShuffleMode) {
+        toggleShuffleMode();
+        return;
+    }
+
+    toggleShuffleMode();
+
+    const audioElement = document.getElementById('audio-player');
+    if (audioElement && audioElement.currentSrc && audioElement.paused) {
+        audioElement.play().catch((error) => {
+            console.warn('Could not start current audio from shuffle button:', error);
+            playRandomStory(true);
+        });
+        return;
+    }
+
     playRandomStory(true);
 }
 
@@ -1159,7 +1193,7 @@ function setupEventListeners() {
     // Shuffle mode button
     const shuffleBtn = document.getElementById('shuffle-btn');
     if (shuffleBtn) {
-        shuffleBtn.onclick = toggleShuffleMode;
+        shuffleBtn.onclick = startShuffleFromButtonClick;
     }
     
     // Export data button
