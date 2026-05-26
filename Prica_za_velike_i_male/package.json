@@ -6,6 +6,7 @@
   "scripts": {
     "start": "lite-server",
     "dev": "lite-server",
+    "build": "echo 'Static site - no build needed'",
     "test": "echo \"No tests configured\" && exit 0"
   },
   "keywords": [
