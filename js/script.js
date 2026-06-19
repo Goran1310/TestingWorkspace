@@ -457,10 +457,8 @@ function openAudioPlayer(link, title, shouldAutoplay = false) {
         clearInterval(saveInterval);
         savePlaybackPosition(link, audioElement.duration, audioElement.duration);
         
-        // Auto-play next in shuffle mode
-        if (isShuffleMode) {
-            setTimeout(() => playRandomStory(true), 1000);
-        }
+        // Click random button and play next story
+        setTimeout(() => playRandomSession(), 1000);
     });
     
     // Add error handling for audio loading
@@ -1161,6 +1159,11 @@ async function initApp() {
     
     // Set up event listeners after DOM elements are available
     setupEventListeners();
+    
+    // Activate shuffle mode by default
+    if (!isShuffleMode) {
+        toggleShuffleMode();
+    }
 }
 
 // Show loading state
