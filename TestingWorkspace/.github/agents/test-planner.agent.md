@@ -440,6 +440,7 @@ _urlHelper.Action(Arg.Is<UrlActionContext>(ctx =>
 - **Batch sizes**: Simple methods (4-6 tests), complex (2-3 tests), session-heavy (3-4 tests)
 - **Pattern**: Create small batch → run → validate → identify patterns → expand
 - **Coverage per method**: Happy path, null handling, edge cases, state verification, property preservation
+- **Coverage status**: Percentages from focused, partial, or intermediate runs are provisional; never report them as the final PR coverage result.
 
 ### PR Review Hygiene for New Tests (Mar 2026)
 **Problem**: Coverage tests passed, but PR review flagged consistency/readability issues.
@@ -474,9 +475,8 @@ CustomValue = "100,5"  // Parses as 100.5 ✅ locally
 // Master branch (GitHub origin/master)
 Share = 50  // int type - no culture issues
 
-// Current branch (after DTO property change to string)
-Share = "50,0"  // Norwegian culture - works locally ✅
-Share = "50.0"  // InvariantCulture - breaks locally ❌
+// Historical local-only test data (after DTO property changed to string)
+Share = "50,0"  // Could pass locally but is misparsed in CI ❌
 
 // Root cause: Share property changed from int to string in DTOs
 // Service code uses Convert.ToDecimal(Share) respecting current culture
@@ -490,12 +490,9 @@ Share = "50.0"  // InvariantCulture - breaks locally ❌
    # If master has string → match existing format
    ```
 
-2. **Use local culture format** (RECOMMENDED when master has int):
+2. **Use the CI-safe period format**:
    ```csharp
-   // For Norwegian development environment
-   Share = "50,0"  // Comma decimal separator (local culture)
-   
-   // ⚠️ Warning: May fail on GitHub CI if not configured for Norwegian culture
+    Share = "50.0"  // Period decimal separator
    ```
 
 3. **Force InvariantCulture in tests** (ideal but requires runsettings setup):
@@ -538,19 +535,43 @@ Share = "50.0"  // InvariantCulture - breaks locally ❌
 3. Reference patterns in test comments: `// See test-planner.agent.md: Session Mocking Pattern`
 4. Maintain example files: `/tests/Examples/SessionBasedServiceTests.example.cs`
 
+### Differential Coverage Completion Gate
+All coverage percentages produced during incremental development are provisional. They must not be presented as the final PR result.
+
+Before marking a test task **COMPLETED** or reporting that a PR is ready:
+
+1. Run the repository-standard differential coverage command against the actual PR base branch and current head. Use the same configuration, exclusions, and coverage settings as CI.
+2. Run the full required test scope for that command. Focused tests can guide development but cannot be used as the final PR coverage result.
+3. Wait for the test process and report-generation process to finish. A partial console result, an unfinished/background command, or a missing report is not validation.
+4. Confirm the report covers the complete changed-code diff and record the final covered/total lines and percentage. Do not infer coverage from a previous run, a different branch, or a subset of changed files.
+5. If code, tests, the PR base, or the PR head changes after the report is generated, discard the report and repeat this gate.
+6. Report success only when the completed percentage meets the configured CI threshold. Otherwise keep the task incomplete, add tests for the reported missing lines, and rerun the same command.
+
+Required completion report format:
+
+```text
+Focused tests: <passed>/<total>
+Full required suite: <passed>/<total>, <failed> failed
+PR differential coverage: <covered>/<total> lines (<percentage>), threshold <threshold>
+Coverage report: completed for <base>...<head>
+```
+
+Never write a completion update that lists an intermediate percentage as evidence of success, for example: "63%, then 89%, above threshold." Only the final completed report is authoritative.
+
 ### Test Plan Maintenance (Critical Routine)
-**When to Update**: After each successful test completion where all tests pass (100% pass rate achieved)
+**When to Update**: Only after the Differential Coverage Completion Gate succeeds. Passing tests alone, focused-test coverage, or intermediate percentages do not establish completion.
 
 **Standard Procedure**:
 1. **Build Verification**: Ensure solution builds successfully (`dotnet build`)
 2. **Test Execution**: Run all relevant tests and confirm 100% pass rate
-3. **Update Test Plan**: Modify `Test_Plan_MeteringPoint_MeterValues_MarketMessages.md` (or relevant plan):
+3. **Differential Coverage**: Run the Differential Coverage Completion Gate and record its final report values
+4. **Update Test Plan**: Modify `Test_Plan_MeteringPoint_MeterValues_MarketMessages.md` (or relevant plan):
    - Change test status from "CREATED" to "COMPLETED"
    - Update pass rate to "(100% passing ✅)"
    - Remove "X fixes needed" notes when all issues resolved
    - Add completion date if tracking milestones
-4. **Document Patterns**: Add any new testing patterns discovered during implementation to this agent file
-5. **Commit Changes**: Include test plan updates in the same commit as test fixes
+5. **Document Patterns**: Add any new testing patterns discovered during implementation to this agent file
+6. **Commit Changes**: Include test plan updates in the same commit as test fixes
 
 **Example Update**:
 ```markdown
