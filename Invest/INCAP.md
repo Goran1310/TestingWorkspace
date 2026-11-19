@@ -1,5 +1,6 @@
 https://investors.incapcorp.com/shareholders/
 https://eulerpool.com/stock/Incap-Oyj-Stock-FI0009006407
+https://app.koyfin.com/chart-template/3adf19db-e75e-43a0-81a0-e39c71ea1a70/eq-6obv6e
 https://www.inderes.se/en/companies/Incap
 https://research.nordea.com/Company/Display/11578
 
