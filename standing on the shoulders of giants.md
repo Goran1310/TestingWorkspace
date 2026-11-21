@@ -36,3 +36,22 @@ Buffett's thesis wasn't that hedge fund managers lack intelligence—it was that
  * Double Layer of Fees: Traditional hedge funds typically charge "2 and 20" (2% of assets annually plus 20% of profits). Because Protégé used funds-of-funds, investors paid an additional management layer on top of that—roughly 2.5% in fixed annual fees alone before performance cuts.
  * Buffett's Takeaway: In his 2017 shareholder letter summarizing the bet, Buffett wrote: "Performance comes, performance goes. Fees never falter." Even when the underlying hedge fund managers picked decent stocks, the massive fee structure transferred most of the gains from the investors to the fund managers.
 
+Comparing Berkshire Hathaway Class B (BRK.B) and the Vanguard 500 Index Fund Admiral Shares (VFIAX) comes down to a classic match-up: Warren Buffett’s conglomerate versus the S&P 500 benchmark he tells almost everyone else to buy.
+Historically, Berkshire Hathaway dominates over multi-decade horizons, while VFIAX has edged ahead over the past 10 years (largely fueled by mega-cap tech growth), though BRK.B has led in recent periods.
+Trailing Annualized Returns (CAGR)
+(Data through mid-November 2026, assuming dividends reinvested for VFIAX)
+| Time Horizon | Berkshire Hathaway (BRK.B) | Vanguard 500 Index (VFIAX) | Leader |
+|---|---|---|---|
+| Year-to-Date (2026) | +14.32% | +8.25% | BRK.B |
+| 1-Year | +13.93% | +11.23% | BRK.B |
+| 3-Year (Annualized) | +16.98% | +19.05% | VFIAX |
+| 5-Year (Annualized) | +15.41% | +10.89% | BRK.B |
+| 10-Year (Annualized) | +13.80% | +14.68% | VFIAX |
+| Since BRK.B Inception (1996–2026) | ~11.09% | ~8.66% (since VFIAX 2000 launch) | BRK.B |
+(Note: Going back to 1965 via Berkshire's Class A shares and the S&P 500 Total Return index, Berkshire compounded at roughly 18%–19.8% annually compared to ~10.5% for the S&P 500—though the vast majority of that outperformance occurred in Berkshire's earlier, smaller decades.)
+Key Structural Differences Behind the Numbers
+ * Concentration vs. Diversification: VFIAX gives you instant exposure to 500 of the largest U.S. companies weighted by market cap—meaning heavy exposure to mega-cap technology (Apple, Microsoft, Nvidia, etc.). BRK.B is a single company operating a massive collection of wholly owned businesses (GEICO, BNSF Railway, Berkshire Hathaway Energy) alongside a concentrated public stock portfolio and a massive Treasury cash pile.
+ * Dividends & Taxes: VFIAX pays a quarterly dividend (yielding roughly 1.1%), creating annual taxable events in a standard brokerage account. BRK.B pays zero dividends, reinvesting all earnings internally or via share buybacks—meaning you defer capital gains taxes until you sell.
+ * Expense Ratio: VFIAX charges a 0.04% annual expense ratio. BRK.B is an individual stock with 0% fund fees.
+ * Downside & Volatility: Historically, BRK.B has often acted defensively during market downturns thanks to its steady insurance/utility cash flows and huge cash reserves—for instance, dropping less than VFIAX during the 2020 COVID crash and the 2022 bear market.
+
