@@ -2,6 +2,11 @@
 
 > **Strategisk grunnmur:** Markedet er ofte kortsiktig og styrt av støy, frykt og grådighet. Din oppgave som privat investor er å tenke 2–3 år frem i tid, kjøpe sterk kontantstrøm billig, ri positive estimatrevideringer, og ha jernhard disiplin når tesen enten er utspilt eller brutt.
 
+## Relaterte dokumenter
+
+- [Peter Hermanrud](./Peter%20Hermanrud.md)
+- [Investeringssjekkliste: Peter Hermanrud-metodikk](./investeringssjekkliste_peter_hermanrud_metodikk.md)
+
 ---
 
 ## 1. Kjøp / Ny posisjon (Startposisjon: 2–4 % av porteføljen)
@@ -41,6 +46,21 @@
 ### Porteføljestyring og psykologi
 * [ ] **Overvinne «forankringsfellen»:** Klarer du å kjøpe mer på høyere kurser enn ditt første kjøp fordi risikoen nå er lavere? (Ikke la deg stoppe av at aksjen allerede har steget 15–20 %).
 * [ ] **Kontroll på totalrisiko:** Hvis du øker denne posten til 10 % av porteføljen, hvor mye total eksponering har du da mot samme sektor, valuta eller råvare? (Unngå at tre ulike 10 %-poster egentlig er det samme veddemålet).
+
+---
+
+## Valutarisiko
+
+Eksempel: «NOK er for svak nå» innebærer en risiko for at en eventuell oppgang i oljeprisen som følge av krig eller geopolitisk uro kan føre til at NOK styrker seg mot EUR, SEK osv. med 10–15 % i løpet av 6–18 måneder.
+
+Dette kan gi negativ avkastning målt i NOK, selv om selve investeringen har steget i lokal valuta.
+
+**Eksempel: NOK/SEK**
+- Januar 2026: 1,10
+- Desember 2026: 0,93
+- Endring: ca. −15,5 %
+
+Med andre ord: Du kan tjene penger på aksjen, men likevel tape penger på valutaendringen.
 
 ---
 

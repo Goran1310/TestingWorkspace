@@ -1,6 +1,11 @@
 # Investeringsmanual & Sjekklister: Fra Første Kjøp til Full Exit
 **Perspektiv:** Privat investor / Ex-aksjestrateg (Metodikk: Fundamental verdsettelse, kontantstrøm, kapitaldisiplin og markedspsykologi)
 
+## Relaterte dokumenter
+
+- [Peter Hermanrud](./Peter%20Hermanrud.md)
+- [Utvidet investeringsdisiplin: kjøp, skalering og salg](./investeringsdisiplin_utvidet_sjekkliste_for_kj_p_skalering_og_salg.md)
+
 ---
 
 ## 1. Sjekkliste: Kjøp / Ny Posisjon (Startpost 2–4 % av porteføljen)
@@ -62,6 +67,21 @@
 
 ---
 
+## Valutarisiko
+
+Eksempel: «NOK er for svak nå» innebærer en risiko for at en eventuell oppgang i oljeprisen som følge av krig eller geopolitisk uro kan føre til at NOK styrker seg mot EUR, SEK osv. med 10–15 % i løpet av 6–18 måneder.
+
+Dette kan gi negativ avkastning målt i NOK, selv om selve investeringen har steget i lokal valuta.
+
+**Eksempel: NOK/SEK**
+- Januar 2026: 1,10
+- Desember 2026: 0,93
+- Endring: ca. −15,5 %
+
+Med andre ord: Du kan tjene penger på aksjen, men likevel tape penger på valutaendringen.
+
+---
+
 ## 3. Sjekkliste: Delvis SALG (Ta gevinst / Redusere vekt fra 10 % til 3–5 %)
 *Kunsten å selge på vei opp handler om å ta betalt når markedet har priset inn perfeksjon, og risikoen har økt.*
 
@@ -101,3 +121,5 @@
 ### D. Den Ultimate Syretesten
 - [ ] **"Hvis jeg hadde kontanter i dag"-testen:** Hvis jeg ikke eide denne aksjen i dag, og hadde hele posisjonsverdien i kontanter på konto – ville jeg kjøpt denne aksjen på dagens kurs? 
   - *Hvis svaret er **NEI**: Selg alt umiddelbart.*
+
+  

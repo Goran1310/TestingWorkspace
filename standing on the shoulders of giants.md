@@ -55,3 +55,4 @@ Key Structural Differences Behind the Numbers
  * Expense Ratio: VFIAX charges a 0.04% annual expense ratio. BRK.B is an individual stock with 0% fund fees.
  * Downside & Volatility: Historically, BRK.B has often acted defensively during market downturns thanks to its steady insurance/utility cash flows and huge cash reserves—for instance, dropping less than VFIAX during the 2020 COVID crash and the 2022 bear market.
 
+
