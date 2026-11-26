@@ -9,7 +9,7 @@ let currentPage = 1;
 const ITEMS_PER_PAGE = 50; // Pagination for performance
 let currentFilter = '';
 let shuffleHistory = []; // Track played stories in shuffle mode
-let isShuffleMode = false;
+let isShuffleMode = true;
 let storyMetadata = []; // Extracted metadata from URLs
 let activeFilters = { year: 'all', author: 'all' };
 
@@ -396,6 +396,7 @@ function openAudioPlayer(link, title, shouldAutoplay = false) {
             <source src="${link}" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
+        <p id="playback-notice" role="status" hidden></p>
         <div class="player-controls">
             <button id="add-to-playlist-btn" 
                 class="playlist-add-btn"
@@ -419,20 +420,6 @@ function openAudioPlayer(link, title, shouldAutoplay = false) {
     
     const audioElement = document.getElementById('audio-player');
 
-    if (shouldAutoplay) {
-        const attemptAutoplay = () => {
-            audioElement.play().catch((error) => {
-                console.warn('Autoplay blocked:', error);
-            });
-        };
-
-        if (audioElement.readyState >= 2) {
-            attemptAutoplay();
-        } else {
-            audioElement.addEventListener('canplay', attemptAutoplay, { once: true });
-        }
-    }
-    
     // Resume from saved position
     if (hasPosition) {
         audioElement.addEventListener('loadedmetadata', () => {
@@ -443,6 +430,8 @@ function openAudioPlayer(link, title, shouldAutoplay = false) {
     // Save position periodically
     let saveInterval;
     audioElement.addEventListener('play', () => {
+        const notice = document.getElementById('playback-notice');
+        if (notice) notice.hidden = true;
         saveInterval = setInterval(() => {
             savePlaybackPosition(link, audioElement.currentTime, audioElement.duration);
         }, 5000); // Save every 5 seconds
@@ -457,8 +446,7 @@ function openAudioPlayer(link, title, shouldAutoplay = false) {
         clearInterval(saveInterval);
         savePlaybackPosition(link, audioElement.duration, audioElement.duration);
         
-        // Click random button and play next story
-        setTimeout(() => playRandomSession(), 1000);
+        playRandomSession();
     });
     
     // Add error handling for audio loading
@@ -472,6 +460,19 @@ function openAudioPlayer(link, title, shouldAutoplay = false) {
             </div>
         `;
     });
+
+    if (shouldAutoplay) {
+        audioElement.play().catch((error) => {
+            console.warn('Could not start playback automatically:', error);
+            if (document.getElementById('audio-player') === audioElement) {
+                const notice = document.getElementById('playback-notice');
+                if (notice) {
+                    notice.textContent = 'Playback could not start automatically. Press play to continue.';
+                    notice.hidden = false;
+                }
+            }
+        });
+    }
     
     // Focus on audio player for accessibility
     setTimeout(() => {
@@ -1160,10 +1161,6 @@ async function initApp() {
     // Set up event listeners after DOM elements are available
     setupEventListeners();
     
-    // Activate shuffle mode by default
-    if (!isShuffleMode) {
-        toggleShuffleMode();
-    }
 }
 
 // Show loading state
@@ -1323,4 +1320,3 @@ if (document.readyState === 'loading') {
 } else {
     initApp();
 }
-
