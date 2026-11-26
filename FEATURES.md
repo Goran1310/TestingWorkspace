@@ -96,7 +96,7 @@
 **User Experience:**
 - Toggle button in header
 - Green when active
-- Auto-play with 1-second delay
+- Attempts to start the next story immediately; if the browser blocks playback, press play to continue
 - Visual feedback
 
 **Storage:**

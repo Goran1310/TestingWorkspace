@@ -7,7 +7,7 @@ A web application for browsing and playing Croatian children's audio stories fro
 - 📚 **204 Audio Stories** - Collection of Croatian children's stories from HRT Juhuhu
 - ❤️ **Favorites System** - Mark and save your favorite stories
 - 🎲 **Random Story** - Start random playback with auto-continue to the next random story
-- 🔀 **Shuffle Mode** - Auto-play random stories without repeats
+- 🔀 **Shuffle Mode** - Auto-play random stories without repeats; if the browser blocks playback, press play to continue
 - 🔍 **Advanced Search** - Fuzzy search with year and author filters
 - 📊 **Metadata Extraction** - Automatic extraction of year, author, and title
 - 📜 **Playback History** - Track recently played stories with play counts
