@@ -142,6 +142,13 @@ The app will open automatically at `http://localhost:3000`
 ### No Build Process Required
 This is a pure static web app - no compilation or bundling needed!
 
+### Deploying on Netlify
+
+Connect the site to `Goran1310/TestingWorkspace` and select `master` as the
+production branch. Set the base directory to `Prica_za_velike_i_male` so
+Netlify reads this project's `netlify.toml`; its publish directory is `.` relative
+to that base directory. No build is required.
+
 ## Updating Stories
 
 To add or update audio links:
